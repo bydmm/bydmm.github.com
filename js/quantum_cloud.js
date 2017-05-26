@@ -50,7 +50,7 @@
     },
     animate: function(collapseLimit) {
       var self = this;
-      var collapsePreLoop = collapseLimit / (30 * 100);
+      var collapsePreLoop = collapseLimit / (10 * 100);
       console.log('collapsePreLoop: ' + collapsePreLoop);
       var timer = setInterval(function () {
         if (self.collapseCount > collapseLimit) {
