@@ -48,22 +48,38 @@
       var cost = (this.now() - this.start).toFixed(2);
       dom.innerText = 'Collapse: ' + this.collapseCount.toLocaleString() + ' times, Cost: ' + cost + 's';
     },
-    run: function(collapseLimit) {
+    animate: function(collapseLimit) {
       var self = this;
-      self.start = this.now();
-      // setInterval(function () {
-      //   self.collapseCount++;
-      //   self.draw();
-      //   self.showStatistics();
-      // }, 0);
-      // booom...
-      setTimeout(function () {
-        for (var i = 0; i < collapseLimit; i++) {
+      var collapsePreLoop = collapseLimit / (60 * 100);
+      console.log('collapsePreLoop: ' + collapsePreLoop);
+      var timer = setInterval(function () {
+        if (self.collapseCount > collapseLimit) {
+          clearInterval(timer);
+          return 0;
+        }
+        for (var i = 0; i < collapsePreLoop; i++) {
           self.collapseCount++;
           self.draw();
         }
         self.showStatistics();
       }, 10);
+    },
+    deviceBenchmark: function(collapseLimit) {
+      for (var i = 0; i < collapseLimit; i++) {
+        this.collapseCount++;
+        this.draw();
+      }
+    },
+    run: function(collapseLimit) {
+      var self = this;
+      self.start = this.now();
+      setTimeout(function () {
+        self.animate(collapseLimit);
+      }, 10);
+      // setTimeout(function () {
+      //   self.deviceBenchmark(collapseLimit);
+      //   self.showStatistics();
+      // }, 10);
     },
     init: function() {
       var w = window.innerWidth;
