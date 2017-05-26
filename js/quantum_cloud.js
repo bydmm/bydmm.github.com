@@ -71,6 +71,8 @@
       var size = window.innerWidth > window.innerHeight ? window.innerHeight : window.innerWidth;
       this.canvas.width = size * 0.8;
       this.canvas.height = this.canvas.width;
+      var container = document.getElementById("js-canvas-container");
+      container.style.paddingTop = (window.innerHeight - container.offsetHeight) / 2 + 'px';
     }
   }
 
