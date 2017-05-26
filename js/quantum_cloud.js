@@ -75,5 +75,5 @@
   }
 
   QuantumCloud.init();
-  QuantumCloud.run(800000);
+  QuantumCloud.run(500000);
 })()
