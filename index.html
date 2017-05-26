@@ -25,7 +25,6 @@
 
     <script type="text/javascript">
     var QuantumCloud = {
-      start: this.now(),
       frame: 0,
       canvas: document.getElementById("js-canvas"),
       now: function() {
@@ -74,7 +73,7 @@
         frameDom.innerText = 'Frame: ' + this.frame + 'Cost:' + cost;
       },
       run: function(frameLimit) {
-        var self = this;
+        this.start = this.now();
         for (var i = 0; i < frameLimit; i++) {
           this.frame++;
           this.draw();
