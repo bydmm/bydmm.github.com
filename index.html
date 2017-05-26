@@ -28,7 +28,8 @@
       frame: 0,
       canvas: document.getElementById("js-canvas"),
       now: function() {
-        return Date.getTime() / 1000;
+        var d = new Date();
+        return d.getTime() / 1000;
       },
       monteCarlo: function() {
         var r = Math.sqrt(-2.0 * Math.log(Math.random()));
