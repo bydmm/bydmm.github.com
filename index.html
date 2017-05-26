@@ -70,8 +70,8 @@
       },
       showFrame: function() {
         var frameDom = document.getElementById("js-frame");
-        var cost = this.now() - this.start;
-        frameDom.innerText = 'Frame: ' + this.frame + ' Cost: ' + cost;
+        var cost = (this.now() - this.start).toFixed(2);
+        frameDom.innerText = 'Frame: ' + this.frame + ' Cost: ' + cost + 's';
       },
       run: function(frameLimit) {
         this.start = this.now();
@@ -83,7 +83,7 @@
       }
     }
 
-    QuantumCloud.run(1000000);
+    QuantumCloud.run(100000);
     </script>
   </body>
 </html>
