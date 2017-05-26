@@ -1,89 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-cmn-Hans">
+<html lang="zh">
   <head>
+    <meta charset="UTF-8">
     <title>Quantum Cloud</title>
-    <style>
-      header {
-        text-align: center;
-      }
-      .canvas-container {
-        display: block;
-        padding: 0;
-        width: 500px;
-        margin: 0 auto;
-      }
-      .frame {
-        text-align: center;
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
     <div class="canvas-container">
-      <canvas id="js-canvas" class="canvas" width="500" height="500"></canvas>
-      <div class="frame" id="js-frame"></div>
+      <canvas id="js-canvas" class="canvas"></canvas>
+      <div class="statistics" id="js-statistics">Wait...</div>
+      <a class="describe-link" href="https://zh.wikipedia.org/zh-hans/电子云">(What's this?)</a>
     </div>
-
-    <script type="text/javascript">
-    var QuantumCloud = {
-      frame: 0,
-      canvas: document.getElementById("js-canvas"),
-      now: function() {
-        var d = new Date();
-        return d.getTime() / 1000;
-      },
-      monteCarlo: function() {
-        var r = Math.sqrt(-2.0 * Math.log(Math.random()));
-        var theta = 2.0 * Math.PI * Math.random();
-        var point = {
-          x: r * Math.cos(theta),
-          y: r * Math.sin(theta)
-        }
-        return point;
-      },
-      canvasContext: function() {
-        if (this.canvas.getContext) {
-          return this.canvas.getContext("2d");
-        } else {
-          throw 'Could not get Canvas context';
-        }
-      },
-      drawElectron: function(x, y, radius) {
-        var ctx = this.canvasContext();
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI*2, true);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.01)';
-        ctx.fill();
-      },
-      draw: function() {
-        var point = this.monteCarlo();
-        var centerX = this.canvas.offsetWidth / 2;
-        var centerY = this.canvas.offsetHeight / 2;
-        var x = centerX + (centerX * point.x) / 4;
-        var y = centerY + (centerY * point.y) / 4;
-        this.drawElectron(x, y , 1);
-      },
-      animloop: function() {
-        if(this.frame > this.frameLimit) return;
-        this.frame++;
-        this.animloop();
-        this.draw();
-      },
-      showFrame: function() {
-        var frameDom = document.getElementById("js-frame");
-        var cost = (this.now() - this.start).toFixed(2);
-        frameDom.innerText = 'Frame: ' + this.frame + ' Cost: ' + cost + 's';
-      },
-      run: function(frameLimit) {
-        this.start = this.now();
-        for (var i = 0; i < frameLimit; i++) {
-          this.frame++;
-          this.draw();
-        }
-        this.showFrame();
-      }
-    }
-
-    QuantumCloud.run(1000000);
-    </script>
+    <script src="js/quantum_cloud.js"></script>
   </body>
 </html>
