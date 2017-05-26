@@ -1,62 +1,84 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Mind Palace by bydmm</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <title>Quantum Cloud</title>
+    <style>
+      header {
+        text-align: center;
+      }
+      .canvas-container {
+        display: block;
+        padding: 0;
+        width: 500px;
+        margin: 0 auto;
+      }
+      .frame {
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Mind Palace</h1>
-        <p class="header">Objective-C, Ruby, Swift, and etc.</p>
-
-
-
-        <ul>
-          <li><a class="buttons github" href="https://github.com/bydmm">GitHub Profile</a></li>
-        </ul>
-
-      </header>
-      <section>
-        <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
-
-<h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
-
-<h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating pages manually</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
-      </section>
-      <footer>
-        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
-      </footer>
+    <div class="canvas-container">
+      <canvas id="js-canvas" class="canvas" width="500" height="500"></canvas>
+      <div class="frame" id="js-frame"></div>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		
+
+    <script type="text/javascript">
+    var QuantumCloud = {
+      frame: 0,
+      canvas: document.getElementById("js-canvas"),
+      monteCarlo: function() {
+        var r = Math.sqrt(-2.0 * Math.log(Math.random()));
+        var theta = 2.0 * Math.PI * Math.random();
+        var point = {
+          x: r * Math.cos(theta),
+          y: r * Math.sin(theta)
+        }
+        return point;
+      },
+      canvasContext: function() {
+        if (this.canvas.getContext) {
+          return this.canvas.getContext("2d");
+        } else {
+          throw 'Could not get Canvas context';
+        }
+      },
+      drawElectron: function(x, y, radius) {
+        var ctx = this.canvasContext();
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI*2, true);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.01)';
+        ctx.fill();
+      },
+      draw: function() {
+        var point = this.monteCarlo();
+        var centerX = this.canvas.offsetWidth / 2;
+        var centerY = this.canvas.offsetHeight / 2;
+        var x = centerX + (centerX * point.x) / 4;
+        var y = centerY + (centerY * point.y) / 4;
+        this.drawElectron(x, y , 1);
+      },
+      animloop: function() {
+        if(this.frame > this.frameLimit) return;
+        this.frame++;
+        this.animloop();
+        this.draw();
+      },
+      showFrame: function() {
+        var frameDom = document.getElementById("js-frame");
+        frameDom.innerText = 'Frame: ' + this.frame;
+      },
+      run: function(frameLimit) {
+        var self = this;
+        for (var i = 0; i < frameLimit; i++) {
+          this.frame++;
+          this.draw();
+        }
+        self.showFrame();
+      }
+    }
+
+    QuantumCloud.run(1000000);
+    </script>
   </body>
 </html>
